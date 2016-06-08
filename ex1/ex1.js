@@ -19,10 +19,24 @@ function output(text) {
 
 // **************************************
 // The old-n-busted callback way
-
+var resp = {};
+var positions = 0;
 function getFile(file) {
 	fakeAjax(file,function(text){
-		// what do we do here?
+		var position = parseInt(file.slice(-1));
+		resp[position] = {};
+		resp[position].text = text;
+		resp[position].logged = false;
+		positions++;
+		for (var i = 0; i <= positions; i++) {
+		  var response = resp[i+1];
+		  if (response && response.logged === false) {
+                    output(response.text);
+		    response.logged = true;
+		  } else if (!response) {
+                    break;
+		  }
+		}
 	});
 }
 
