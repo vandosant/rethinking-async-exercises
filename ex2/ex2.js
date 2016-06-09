@@ -20,8 +20,36 @@ function output(text) {
 // **************************************
 
 function getFile(file) {
-	// what do we do here?
+	var cachedResponse;
+	fakeAjax(file, function(response) {
+	  cachedResponse = response;
+	});
+	return function(cb) {
+	  if (cachedResponse != null) {
+            cb(cachedResponse);
+	    return
+	  }
+	  var interval = setInterval(function() {
+            if (cachedResponse != null) {
+              cb(cachedResponse);
+	      clearInterval(interval);
+	      return
+	    };
+	  }, 100);
+	}
 }
 
-// request all files at once in "parallel"
-// ???
+var file1 = getFile("file1")
+var file2 = getFile("file2")
+var file3 = getFile("file3")
+
+file1(function(file1Text) {
+  output(file1Text);
+  file2(function(file2Text) {
+    output(file2Text);
+    file3(function(file3Text) {
+      output(file3Text);
+      output("Complete.");
+    })
+  })
+})
