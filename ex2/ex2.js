@@ -21,21 +21,21 @@ function output(text) {
 
 function getFile(file) {
 	var cachedResponse;
+	var callback;
 	fakeAjax(file, function(response) {
-	  cachedResponse = response;
+	  if (callback) {
+            callback(response);
+	  } else {
+	    cachedResponse = response;
+	  }
 	});
 	return function(cb) {
 	  if (cachedResponse != null) {
             cb(cachedResponse);
 	    return
+	  } else {
+            callback = cb;
 	  }
-	  var interval = setInterval(function() {
-            if (cachedResponse != null) {
-              cb(cachedResponse);
-	      clearInterval(interval);
-	      return
-	    };
-	  }, 100);
 	}
 }
 
