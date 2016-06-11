@@ -20,8 +20,25 @@ function output(text) {
 // **************************************
 
 function getFile(file) {
-	// what do we do here?
+  return new Promise(function (resolve, reject) {
+    fakeAjax(file, resolve);
+  });
 }
 
-// request all files at once in "parallel"
-// ???
+var f1 = getFile('file1');
+var f2 = getFile('file2');
+var f3 = getFile('file3');
+
+f1
+.then(output)
+.then(function() {
+  return f2;
+})
+.then(output)
+.then(function() {
+  return f3;
+})
+.then(output)
+.then(function() {
+  output('Complete.');
+})
