@@ -25,11 +25,8 @@ function getFile(file) {
 	});
 }
 
-// Request all files at once in
-// "parallel" via `getFile(..)`.
-//
-// Render as each one finishes,
-// but only once previous rendering
-// is done.
-
-// ???
+["file1", "file2", "file3"]
+.map(getFile)
+.reduce(function(acc, asq) {
+  return acc.then(asq).val(output)
+}, ASQ())
