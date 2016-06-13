@@ -26,11 +26,12 @@ function getFile(file) {
 	});
 }
 
-// Request all files at once in
-// "parallel" via `getFile(..)`.
-//
-// Render as each one finishes,
-// but only once previous rendering
-// is done.
-
-// ???
+["file1", "file2", "file3"]
+.map(getFile)
+.reduce(function(acc, promise) {
+  return acc.then(function() {
+    return promise
+  })
+  .then(output)
+}, Promise.resolve())
+.then(function() {output("Complete.")})
